@@ -16,7 +16,7 @@ shift # shift the remaining arguments
 
 set -e
 
-source activate shaperecon
+# source activate shaperecon
 
 python 'test.py' \
     --net genre_full_model \
@@ -32,4 +32,4 @@ python 'test.py' \
     --gpu "$gpu" \
     $*
 
-source deactivate
+# source deactivate

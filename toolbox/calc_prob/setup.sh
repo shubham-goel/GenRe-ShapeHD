@@ -11,6 +11,7 @@ echo "Check 'http://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html' f
 # Titan X (Pascal): 61
 # GTX 1080: 61
 # Titan Xp: 61
+# GTX 2080: 75
 
 TORCH=$(python -c "import os; import torch; print(os.path.dirname(torch.__file__))")
 HAS_CUDA=$(python -c "import torch; print(torch.cuda.is_available())")
@@ -22,10 +23,11 @@ if [ "$HAS_CUDA" == "True" ]; then
     fi
     cd calc_prob/src
     HERE=$(pwd -P)
-    cmd="nvcc -c -o calc_prob_kernel.cu.o calc_prob_kernel.cu -x cu -Xcompiler -fPIC -I ${TORCH}/lib/include -I ${TORCH}/lib/include/TH -I ${TORCH}/lib/include/THC -I ${HERE} \
+    cmd="nvcc -c -std=c++11 -o calc_prob_kernel.cu.o calc_prob_kernel.cu -x cu -Xcompiler -fPIC -I ${TORCH}/lib/include -I ${TORCH}/lib/include/TH -I ${TORCH}/lib/include/THC -I ${HERE} \
         -gencode arch=compute_30,code=sm_30 \
         -gencode arch=compute_35,code=sm_35 \
         -gencode arch=compute_52,code=sm_52 \
+        -gencode arch=compute_75,code=sm_75 \
         -gencode arch=compute_61,code=sm_61 "
     echo "$cmd"
     eval "$cmd"
